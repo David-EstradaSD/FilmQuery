@@ -15,7 +15,6 @@ public class Actor implements DatabaseAccessor {
 	}
 
 	public Actor(int id, String firstName, String lastName) {
-		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -38,7 +37,7 @@ public class Actor implements DatabaseAccessor {
 
 	@Override
 	public String toString() {
-		return "Actor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return firstName + " " + lastName;
 	}
 
 	public int getId() {
@@ -99,6 +98,12 @@ public class Actor implements DatabaseAccessor {
 		} else if (!lastName.equals(other.lastName))
 			return false;
 		return true;
+	}
+
+	@Override
+	public List<Film> findFilmByKeyword(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

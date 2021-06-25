@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.Language;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 
@@ -31,25 +32,68 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
-					+ "rental_rate, length, replacement_cost, rating, special_features FROM film WHERE id = ?";
+			String sql = "SELECT film.title, film.release_year, film.rating, film.description, language.name "
+					+ "FROM film JOIN language ON language.id = film.language_id "
+					+ "WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1,filmId);
 			ResultSet filmResult = stmt.executeQuery();
 			if (filmResult.next()) {
-				film = new Film(filmId);
-				film.setFilmId(filmResult.getInt("id"));
+				film = new Film();
+				Language lang = new Language();
+//				film.setFilmId(filmResult.getInt("id"));
 				film.setTitle(filmResult.getString("title"));
 				film.setDescription(filmResult.getString("description"));
 				film.setReleaseYear(filmResult.getInt("release_year"));
-				film.setLanguageId(filmResult.getInt("language_id"));
-				film.setRentalDuration(filmResult.getInt("rental_duration"));
-				film.setRentalRate(filmResult.getDouble("rental_rate"));
-				film.setLength(filmResult.getInt("length"));
-				film.setReplacementCost(filmResult.getDouble("replacement_cost"));
 				film.setRating(filmResult.getString("rating"));
-				film.setSpecialFeatures(filmResult.getString("special_features"));
 				film.setActors(findActorsByFilmId(filmId));
+				// create the object (Table Name)
+				// instantiate the object in the local result set (for Language, its on line 43)
+				lang.setName(filmResult.getString("language.name"));
+				film.setLanguage(lang);
+//				film.setLanguageId(filmResult.getInt("language_id"));
+//				film.setRentalDuration(filmResult.getInt("rental_duration"));
+//				film.setRentalRate(filmResult.getDouble("rental_rate"));
+//				film.setLength(filmResult.getInt("length"));
+//				film.setReplacementCost(filmResult.getDouble("replacement_cost"));
+//				film.setSpecialFeatures(filmResult.getString("special_features"));
+				
+			}
+				filmResult.close();
+				stmt.close();
+				conn.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return film;
+	}
+
+	@Override
+	public List<Film> findFilmByKeyword(String keyword) {
+		
+		List<Film> filmList = new ArrayList<Film>();
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT film.id, film.title, film.release_year, film.rating, film.description, language.name "
+					+ "FROM film JOIN language ON language.id = film.language_id "
+					+ "WHERE title LIKE ?"; // OR description LIKE '%" + keyword + "%'";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1,"%" + keyword + "%");
+			ResultSet filmResult = stmt.executeQuery();
+			while (filmResult.next()) { //next() is also checking 
+				Film film = new Film();
+				Language lang = new Language();
+				film.setTitle(filmResult.getString("title"));
+				film.setRating(filmResult.getString("rating"));
+				film.setDescription(filmResult.getString("description"));
+				film.setReleaseYear(filmResult.getInt("release_year"));
+				lang.setName(filmResult.getString("language.name"));
+				film.setLanguage(lang);
+				film.setActors(findActorsByFilmId(filmResult.getInt("film.id")));
+				// we can use data from the database to pass as our arguments
+				// we can use data that we are not going to display and is independent from the java classes
+				filmList.add(film);
 			}
 			
 				filmResult.close();
@@ -59,7 +103,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return film;
+		return filmList;
+		
 	}
 
 	@Override
@@ -101,7 +146,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 					+ "WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
-			
 //			System.out.println(stmt);  // Tester statment to test my SQL string
 			
 			ResultSet rs = stmt.executeQuery();
