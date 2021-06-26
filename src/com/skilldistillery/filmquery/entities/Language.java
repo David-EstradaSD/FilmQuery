@@ -5,7 +5,6 @@ public class Language {
 	private String name;
 
 	public Language() {
-		super();
 	}
 
 	@Override

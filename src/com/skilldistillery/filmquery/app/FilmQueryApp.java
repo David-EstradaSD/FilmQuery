@@ -64,15 +64,16 @@ public class FilmQueryApp {
   }
 
   public void printMainMenu() {
-		System.out.println("---------------Menu---------------");
+		System.out.println("\n---------------Menu---------------");
 		System.out.println("1) Look up film by its ID");
 		System.out.println("2) Look up a film by a search keyword");
 		System.out.println("3) Exit the application");
 		System.out.println("----------------------------------\n");
-		System.out.print("Please select a Menu option: ");
+		System.out.print("Please select a Menu option: \n");
 	}
   
   public void lookUpById(Scanner sc) {
+		  
 	  System.out.println("Please enter a film ID");
 	  int filmId = sc.nextInt();
 	  sc.nextLine();
@@ -82,7 +83,21 @@ public class FilmQueryApp {
 	  }
 	  else {
 		  System.out.println(film);
-	  }
+		  printSubMenu();
+		  int subChoice = sc.nextInt();
+		  sc.nextLine();
+		  switch(subChoice) {
+		  case 1: 
+			  System.out.println("Returning to Main Menu");
+			  break;
+		  case 2:
+			  System.out.println(db.findFilmByIdDisplayAllData(filmId).toString2());
+			  break;
+		  default: 
+				System.err.println("Invalid entry! Select option 1 - 2");
+
+		  }
+	  	}
   }
   
   public void lookUpByKeyword(Scanner sc) {
@@ -100,19 +115,12 @@ public class FilmQueryApp {
 	  }
 		  
   }
-  // stetch goal method
-  public void printSecondaryMenu() {
+  public void printSubMenu() {
 		System.out.println("--------------SubMenu--------------");
 		System.out.println("1) Return to the Main Menu");
 		System.out.println("2) Display all current film details");
 		System.out.println("-----------------------------------\n");
-		System.out.print("Please select a SubMenu option: ");
 	} 
-  // stretch goal method
-  public void displayAllFilmDetails() {
 	  
-  }
-  
-  
   
 }

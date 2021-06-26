@@ -41,7 +41,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			if (filmResult.next()) {
 				film = new Film();
 				Language lang = new Language();
-//				film.setFilmId(filmResult.getInt("id"));
 				film.setTitle(filmResult.getString("title"));
 				film.setDescription(filmResult.getString("description"));
 				film.setReleaseYear(filmResult.getInt("release_year"));
@@ -51,12 +50,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				// instantiate the object in the local result set (for Language, its on line 43)
 				lang.setName(filmResult.getString("language.name"));
 				film.setLanguage(lang);
-//				film.setLanguageId(filmResult.getInt("language_id"));
-//				film.setRentalDuration(filmResult.getInt("rental_duration"));
-//				film.setRentalRate(filmResult.getDouble("rental_rate"));
-//				film.setLength(filmResult.getInt("length"));
-//				film.setReplacementCost(filmResult.getDouble("replacement_cost"));
-//				film.setSpecialFeatures(filmResult.getString("special_features"));
 				
 			}
 				filmResult.close();
@@ -146,10 +139,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 					+ "WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
-//			System.out.println(stmt);  // Tester statment to test my SQL string
-			
 			ResultSet rs = stmt.executeQuery();
-		  
 			while(rs.next()) {
 				int actorId = rs.getInt("actor.id");
 				String firstName = rs.getString("actor.first_name");
@@ -166,13 +156,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			return actors;
 	}
 	
-	// stretch goal method
 	@Override
 	  public Film findFilmByIdDisplayAllData(int filmId) {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT film.title, film.id, film.language_id, film.rental_duration, film.rental_date, "
+			String sql = "SELECT film.title, film.id, film.language_id, film.rental_duration, film.rental_rate, "
 					+ "film.length, film.replacement_cost, film.special_features, film.release_year, film.rating, film.description, language.name "
 					+ "FROM film JOIN language ON language.id = film.language_id "
 					+ "WHERE film.id = ?";
