@@ -1,15 +1,12 @@
 package com.skilldistillery.filmquery.entities;
 
-import java.util.List;
 
-import com.skilldistillery.filmquery.database.DatabaseAccessor;
-
-public class Actor implements DatabaseAccessor {
+public class Actor {
 
 	private int id;
 	private String firstName;
 	private String lastName;
-	
+
 	public Actor(int id) {
 		this.id = id;
 	}
@@ -18,21 +15,6 @@ public class Actor implements DatabaseAccessor {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-	}
-
-	@Override
-	public Film findFilmById(int filmId) {
-		return null;
-	}
-
-	@Override
-	public Actor findActorById(int actorId) {
-		return null;
-	}
-
-	@Override
-	public List<Actor> findActorsByFilmId(int filmId) {
-		return null;
 	}
 
 	@Override
@@ -63,8 +45,6 @@ public class Actor implements DatabaseAccessor {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
-	
 
 	@Override
 	public int hashCode() {
@@ -98,12 +78,6 @@ public class Actor implements DatabaseAccessor {
 		} else if (!lastName.equals(other.lastName))
 			return false;
 		return true;
-	}
-
-	@Override
-	public List<Film> findFilmByKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

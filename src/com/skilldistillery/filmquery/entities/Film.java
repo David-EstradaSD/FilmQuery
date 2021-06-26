@@ -18,12 +18,11 @@ public class Film {
 	private List<Actor> actors;
 	private Language language;
 	
-	public Film() {
-	}
+	public Film() {}
 
-
-	public Film(int filmId, String title, String description, int releaseYear, int languageId, int rentalDuration,
-			double rentalRate, int length, double replacementCost, String rating, String specialFeatures, List<Actor> actors) {
+	public Film(int filmId, String title, String description, int releaseYear, int languageId, 
+			int rentalDuration, double rentalRate, int length, double replacementCost, 
+			String rating, String specialFeatures, List<Actor> actors, Language language) {
 		this.filmId = filmId;
 		this.title = title;
 		this.description = description;
@@ -36,12 +35,20 @@ public class Film {
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
 		this.actors = actors;
+		this.language = language;
 	}
 
 	@Override
 	public String toString() {
 		return "Film Title: " + title + "\n" + "Release Year: " + releaseYear + "\n" + "Rating: " 
 				+ rating + "\n" + "Description: " + description + "\n" + language + "\n" + "Actors: " + actors;
+	}
+	// 2nd toString for Stretch Goal 1 to display all film details
+	public String toString2() {
+		return "Film Title: " + title + "\n" + "Release Year: " + releaseYear + "\n" + "Rating: " 
+				+ rating + "\n" + "Description: " + description + "\n" + language + "\n" + "Actors: " + actors + "\n" +
+				"ID: " + filmId + "\nLanguageID: " + languageId + "\nRentalTime: " + rentalDuration + "\nRentalRate: " + rentalRate
+				+ "\nLength: " + length + "\nReplaceCost: " + replacementCost + "\nSpecial Features: " + specialFeatures;
 	}
 
 	public int getFilmId() {

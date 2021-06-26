@@ -100,7 +100,18 @@ public class FilmQueryApp {
 	  }
 		  
   }
-  
+  // stetch goal method
+  public void printSecondaryMenu() {
+		System.out.println("--------------SubMenu--------------");
+		System.out.println("1) Return to the Main Menu");
+		System.out.println("2) Display all current film details");
+		System.out.println("-----------------------------------\n");
+		System.out.print("Please select a SubMenu option: ");
+	} 
+  // stretch goal method
+  public void displayAllFilmDetails() {
+	  
+  }
   
   
   
