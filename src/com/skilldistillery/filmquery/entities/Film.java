@@ -42,18 +42,18 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "\nFilm ID: " + filmId + "\nTitle: " + title + "\nRelease Year: " + releaseYear + "\nRating: " + rating +
-				"\nDescription: " + description + "\n" + language + "\n" + "Actors: " + actors;
+		return "\nFilm ID: " + filmId + "\nTitle: " + title + "\nRelease Year: " + releaseYear + "\nRating: " + rating
+				+ "\nDescription: " + description + "\n" + language + "\n" + "Actors: " + actors;
 	}
 
 	// 2nd toString to display all film details
 	public String detailedInformation() {
-		return "\nTitle: " + title + "\nFilm ID: " + filmId + "\nRelease Year: " + releaseYear + "\n" + "Rating: " + rating + "\n"
-				+ "Description: " + description + "\n" + language + "\n" + "Actors: " + actors
-				+ "\nLanguage ID: " + languageId + "\nRental Duration: " + rentalDuration + "\nRental Rate: " + rentalRate
-				+ "\nLength (minutes): " + length + "\nReplaceCost: " + replacementCost + "\nSpecial Features: "
-				+ specialFeatures + "\n" + category;
-		
+		return "\nTitle: " + title + "\nFilm ID: " + filmId + "\nRelease Year: " + releaseYear + "\n" + "Rating: "
+				+ rating + "\n" + "Description: " + description + "\n" + language + "\n" + "Actors: " + actors
+				+ "\nLanguage ID: " + languageId + "\nRental Duration: " + rentalDuration + "\nRental Rate: "
+				+ rentalRate + "\nLength (minutes): " + length + "\nReplaceCost: " + replacementCost
+				+ "\nSpecial Features: " + specialFeatures + "\n" + category;
+
 	}
 
 	public Category getCategory() {

@@ -88,7 +88,7 @@ public class FilmQueryApp {
 				System.out.println("Returning to Main Menu");
 			}
 		}
-		
+
 	}
 
 	public void lookUpByKeyword(Scanner sc) {
