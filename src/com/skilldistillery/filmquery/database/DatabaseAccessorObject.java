@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
+import com.skilldistillery.filmquery.entities.Category;
 import com.skilldistillery.filmquery.entities.Film;
 import com.skilldistillery.filmquery.entities.Language;
 
@@ -32,7 +33,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT film.title, film.release_year, film.rating, film.description, language.name "
+			String sql = "SELECT film.title, film.id, film.release_year, film.rating, film.description, language.name "
 					+ "FROM film JOIN language ON language.id = film.language_id "
 					+ "WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
@@ -42,6 +43,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film = new Film();
 				Language lang = new Language();
 				film.setTitle(filmResult.getString("title"));
+				film.setFilmId(filmResult.getInt("film.id"));
 				film.setDescription(filmResult.getString("description"));
 				film.setReleaseYear(filmResult.getInt("release_year"));
 				film.setRating(filmResult.getString("rating"));
@@ -70,14 +72,18 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT film.id, film.title, film.release_year, film.rating, film.description, language.name "
 					+ "FROM film JOIN language ON language.id = film.language_id "
-					+ "WHERE title LIKE ?"; // OR description LIKE '%" + keyword + "%'";
+					+ "WHERE film.title LIKE ? OR film.description LIKE ?"; // OR description LIKE '%" + keyword + "%'";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1,"%" + keyword + "%");
+			// the 1 and 2 in setX method denotes which ? parameter we are referring to 
+			// in this case, 1 is the first one and 2 is the second one
+			stmt.setString(2,"%" + keyword + "%");
 			ResultSet filmResult = stmt.executeQuery();
 			while (filmResult.next()) { //next() is also checking 
 				Film film = new Film();
 				Language lang = new Language();
 				film.setTitle(filmResult.getString("title"));
+				film.setFilmId(filmResult.getInt("film.id"));
 				film.setRating(filmResult.getString("rating"));
 				film.setDescription(filmResult.getString("description"));
 				film.setReleaseYear(filmResult.getInt("release_year"));
@@ -161,9 +167,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT film.title, film.id, film.language_id, film.rental_duration, film.rental_rate, "
+			String sql = "SELECT category.name, film.title, film.id, film.language_id, film.rental_duration, film.rental_rate, "
 					+ "film.length, film.replacement_cost, film.special_features, film.release_year, film.rating, film.description, language.name "
-					+ "FROM film JOIN language ON language.id = film.language_id "
+					+ "FROM film LEFT JOIN language ON language.id = film.language_id "
+					+ "LEFT JOIN film_category ON film_category.film_id = film.id "
+					+ "LEFT JOIN category ON category.id = film_category.film_id "
 					+ "WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1,filmId);
@@ -171,20 +179,26 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			if (filmResult.next()) {
 				film = new Film();
 				Language lang = new Language();
-				film.setFilmId(filmResult.getInt("id"));
+				Category cat = new Category();
+				film.setFilmId(filmResult.getInt("film.id"));
 				film.setTitle(filmResult.getString("title"));
 				film.setDescription(filmResult.getString("description"));
 				film.setReleaseYear(filmResult.getInt("release_year"));
 				film.setRating(filmResult.getString("rating"));
-				film.setActors(findActorsByFilmId(filmId));
-				lang.setName(filmResult.getString("language.name"));
-				film.setLanguage(lang);
-				film.setLanguageId(filmResult.getInt("language_id"));
 				film.setRentalDuration(filmResult.getInt("rental_duration"));
 				film.setRentalRate(filmResult.getDouble("rental_rate"));
 				film.setLength(filmResult.getInt("length"));
 				film.setReplacementCost(filmResult.getDouble("replacement_cost"));
 				film.setSpecialFeatures(filmResult.getString("special_features"));
+				//set actors
+				film.setActors(findActorsByFilmId(filmId));
+				//set language
+				lang.setName(filmResult.getString("language.name"));
+				film.setLanguage(lang);
+				film.setLanguageId(filmResult.getInt("language_id"));
+				//set category
+				cat.setName(filmResult.getString("category.name"));
+				film.setCategory(cat);
 				
 			}
 				filmResult.close();
@@ -197,6 +211,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return film;
 		
 	}
-
+	
 
 }

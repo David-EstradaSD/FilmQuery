@@ -17,13 +17,14 @@ public class Film {
 	private String specialFeatures;
 	private List<Actor> actors;
 	private Language language;
+	private Category category;
 
 	public Film() {
 	}
 
 	public Film(int filmId, String title, String description, int releaseYear, int languageId, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
-			List<Actor> actors, Language language) {
+			List<Actor> actors, Language language, Category category) {
 		this.filmId = filmId;
 		this.title = title;
 		this.description = description;
@@ -41,17 +42,26 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "Film Title: " + title + "\n" + "Release Year: " + releaseYear + "\n" + "Rating: " + rating + "\n"
-				+ "Description: " + description + "\n" + language + "\n" + "Actors: " + actors;
+		return "\nFilm ID: " + filmId + "\nTitle: " + title + "\nRelease Year: " + releaseYear + "\nRating: " + rating +
+				"\nDescription: " + description + "\n" + language + "\n" + "Actors: " + actors;
 	}
 
 	// 2nd toString to display all film details
-	public String toString2() {
-		return "Film Title: " + title + "\n" + "Release Year: " + releaseYear + "\n" + "Rating: " + rating + "\n"
-				+ "Description: " + description + "\n" + language + "\n" + "Actors: " + actors + "\n" + "ID: " + filmId
-				+ "\nLanguageID: " + languageId + "\nRentalTime: " + rentalDuration + "\nRentalRate: " + rentalRate
-				+ "\nLength: " + length + "\nReplaceCost: " + replacementCost + "\nSpecial Features: "
-				+ specialFeatures;
+	public String detailedInformation() {
+		return "\nTitle: " + title + "\nFilm ID: " + filmId + "\nRelease Year: " + releaseYear + "\n" + "Rating: " + rating + "\n"
+				+ "Description: " + description + "\n" + language + "\n" + "Actors: " + actors
+				+ "\nLanguage ID: " + languageId + "\nRental Duration: " + rentalDuration + "\nRental Rate: " + rentalRate
+				+ "\nLength (minutes): " + length + "\nReplaceCost: " + replacementCost + "\nSpecial Features: "
+				+ specialFeatures + "\n" + category;
+		
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public int getFilmId() {
